@@ -1,26 +1,39 @@
-    // openweather map website api key// const API_KEY = `42309af60b351ebfd22f63c1e6dd058f`;
-const API_KEY = `02e113ad8d4e48ea86b55246220811`;
-const searchTemperature = () => {
-    const city = document.getElementById('city-name').value;
-    // janker vai   // const url = `http://api.openweathermap.org/geo/1.0/direct?q=${city}&appid=${API_KEY}&units=metric`;
-    const url = `http://api.weatherapi.com/v1/current.json?key=${API_KEY}&q=${city}&aqi=no`;
-    
 
+const API_KEY = `42309af60b351ebfd22f63c1e6dd058f`;
+
+
+const loadTemperature = city => {
+    const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${API_KEY}`;
     fetch(url)
         .then(res => res.json())
         .then(data => displayTemperature(data));
 }
 
-const setInnerText = (id, text) => {
-    document.getElementById(id).innerText = text;
+const displayTemperature = data => {
+    // const temperature = document.getElementById('temperature');
+    // // console.log(data.main.temp);
+    // temperature.innerText = data.main.temp;
+    setInnerTextById('temperature', data.main.temp);
+    setInnerTextById('condition', data.weather[0].main)
+    // console.log(data.weather[0].main);
 }
 
+const setInnerTextById = (id, text) => {
+    const temperature = document.getElementById(id);
+    temperature.innerText = text;
 
-const displayTemperature = temperature => {
-    setInnerText('city', temperature.location.name);
-    setInnerText('country', temperature.location.country);
-    setInnerText('temperature', temperature.current.temp_c);
-    setInnerText('time', temperature.location.localtime);
-    console.log(temperature);
-        
-    }
+}
+
+document.getElementById('btn-search').addEventListener('click', function () {
+    const searchField = document.getElementById('search-field');
+    const city = searchField.value;
+    // set city
+    document.getElementById('city').innerText = city;
+    loadTemperature(city);
+
+})
+
+
+
+
+loadTemperature('dhaka');
